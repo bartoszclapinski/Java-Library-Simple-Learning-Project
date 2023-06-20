@@ -1,8 +1,10 @@
+package library.app;
 
+import library.model.Book;
 
 public class Library {
     public static void main(String[] args) {
-        final String appName = "Library v0.4";
+        final String appName = "Library v0.5";
 
         Book book1 = new Book("Java. Effective programming. Guide for the good developer",
                 "Joshua Bloch",
