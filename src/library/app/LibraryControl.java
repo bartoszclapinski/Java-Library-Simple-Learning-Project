@@ -16,10 +16,20 @@ public class LibraryControl {
             switch (option) {
                 case ADD_BOOK -> addBook();
                 case PRINT_BOOKS -> printBooks();
+                case ADD_MAGAZINE -> addMagazine();
+                case PRINT_MAGAZINES -> printMagazines();
                 case EXIT -> exit();
                 default -> System.out.println("There is no such option, choose again!");
             }
         } while (option != Option.EXIT);
+    }
+
+    private void addMagazine() {
+        library.addMagazine(dataReader.readAndCreateMagazine());
+    }
+
+    private void printMagazines() {
+        library.printMagazines();
     }
 
     private void exit() {
