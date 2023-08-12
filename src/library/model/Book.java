@@ -1,5 +1,7 @@
 package library.model;
 
+import java.util.Objects;
+
 public class Book extends Publication{
     private String author;
     private int pages;
@@ -10,14 +12,6 @@ public class Book extends Publication{
         this.author = author;
         this.pages = pages;
         this.isbn = isbn;
-    }
-
-    @Override
-    public void printInfo() {
-        String info = getTitle() + "; " + author + "; " + getYear() + "; " +
-                pages + "; " + getPublisher();
-        if (isbn != null) info = info + "; " + isbn;
-        System.out.println(info);
     }
 
     public String getAuthor() {
@@ -42,5 +36,32 @@ public class Book extends Publication{
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    /*
+        @Overriding
+     */
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "author='" + author + '\'' +
+                ", pages=" + pages +
+                ", isbn='" + isbn + '\'' +
+                "} " + super.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Book book = (Book) o;
+        return getPages() == book.getPages() && Objects.equals(getAuthor(), book.getAuthor()) && Objects.equals(getIsbn(), book.getIsbn());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getAuthor(), getPages(), getIsbn());
     }
 }
