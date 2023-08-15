@@ -7,8 +7,8 @@ public enum Option {
     ADD_MAGAZINE(3, "Add new magazine"),
     PRINT_MAGAZINES(4, "Print all magazines");
 
-    private int value;
-    private String description;
+    private final int value;
+    private final String description;
 
     Option(int value, String description) {
         this.value = value;
