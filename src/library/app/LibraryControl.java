@@ -1,36 +1,64 @@
 package library.app;
 
+import library.exception.NoSuchOptionException;
+import library.io.ConsolePrinter;
 import library.io.DataReader;
 import library.model.Library;
+import library.model.Publication;
+
+import java.util.InputMismatchException;
 
 public class LibraryControl {
-    private final DataReader dataReader = new DataReader();
+    private ConsolePrinter consolePrinter = new ConsolePrinter();
+    private final DataReader dataReader = new DataReader(consolePrinter);
     private final Library library = new Library();
 
     public void controlLoop() {
         Option option;
-
         do {
             printOptions();
-            option = Option.createFromInt(dataReader.getInt());
+            option = getOption();
             switch (option) {
                 case ADD_BOOK -> addBook();
                 case PRINT_BOOKS -> printBooks();
                 case ADD_MAGAZINE -> addMagazine();
                 case PRINT_MAGAZINES -> printMagazines();
                 case EXIT -> exit();
-                default -> System.out.println("There is no such option, choose again!");
+                default -> consolePrinter.printLine("There is no such option, choose again!");
             }
         } while (option != Option.EXIT);
     }
 
+    private Option getOption() {
+        boolean optionOk = false;
+        Option option = null;
+        while (!optionOk) {
+            try {
+                option = Option.createFromInt(dataReader.getInt());
+                optionOk = true;
+            } catch (NoSuchOptionException e) {
+                consolePrinter.printLine("Provide again: ");
+            } catch (InputMismatchException e) {
+                consolePrinter.printLine("Input is not a number, provide again: ");
+            }
+        }
+        return option;
+    }
+
     private void addMagazine() {
-        library.addMagazine(dataReader.readAndCreateMagazine());
+        try {
+            library.addMagazine(dataReader.readAndCreateMagazine());
+        } catch (InputMismatchException e) {
+            consolePrinter.printLine("Wrong data entered, try again.");
+        } catch (ArrayIndexOutOfBoundsException e) {
+            consolePrinter.printLine("Max publications number reached!");
+        }
     }
 
     private void printMagazines() {
-        library.printMagazines();
-    }
+            Publication[] publications = library.getPublications();
+            consolePrinter.printMagazines(publications);
+        }
 
     private void exit() {
         System.out.println("Bye bye!");
@@ -38,17 +66,24 @@ public class LibraryControl {
     }
 
     private void printBooks() {
-        library.printBooks();
-    }
+            Publication[] publications = library.getPublications();
+            consolePrinter.printBooks(publications);
+        }
 
     private void addBook() {
-        library.addBook(dataReader.readAndCreateBook());
+        try {
+            library.addBook(dataReader.readAndCreateBook());
+        } catch (InputMismatchException e) {
+            consolePrinter.printLine("Wrong data entered, try again.");
+        } catch (ArrayIndexOutOfBoundsException e) {
+            consolePrinter.printLine("Max publications number reached!");
+        }
     }
 
     private void printOptions() {
         System.out.println("Choose option: ");
         for (Option option : Option.values()) {
-            System.out.println(option);
+            consolePrinter.printLine(option.toString());
         }
     }
 }
