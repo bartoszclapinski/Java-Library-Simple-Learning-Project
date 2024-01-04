@@ -1,8 +1,11 @@
 package library.app;
 
+import library.exception.DataImportException;
 import library.exception.NoSuchOptionException;
 import library.io.ConsolePrinter;
 import library.io.DataReader;
+import library.io.file.FileManager;
+import library.io.file.FileManagerBuilder;
 import library.model.Library;
 import library.model.Publication;
 
@@ -11,9 +14,22 @@ import java.util.InputMismatchException;
 public class LibraryControl {
     private ConsolePrinter consolePrinter = new ConsolePrinter();
     private final DataReader dataReader = new DataReader(consolePrinter);
-    private final Library library = new Library();
+    private FileManager fileManager;
+    private Library library;
 
-    public void controlLoop() {
+    public LibraryControl() {
+        fileManager = new FileManagerBuilder(consolePrinter, dataReader).build();
+        try {
+            library = fileManager.importData();
+            consolePrinter.printLine("Data has been imported from file.");
+        } catch (DataImportException e) {
+            consolePrinter.printLine(e.getMessage());
+            consolePrinter.printLine("New database has been initialized.");
+            library = new Library();
+        }
+    }
+
+    void controlLoop() {
         Option option;
         do {
             printOptions();
@@ -61,7 +77,13 @@ public class LibraryControl {
         }
 
     private void exit() {
-        System.out.println("Bye bye!");
+        try {
+            fileManager.exportData(library);
+            consolePrinter.printLine("Data exported to file.");
+        } catch (DataImportException e) {
+            consolePrinter.printLine(e.getMessage());
+        }
+        consolePrinter.printLine("Bye bye!");
         dataReader.close();
     }
 
