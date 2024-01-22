@@ -63,7 +63,7 @@ public class LibraryControl {
 
     private void addMagazine() {
         try {
-            library.addMagazine(dataReader.readAndCreateMagazine());
+            library.addPublication(dataReader.readAndCreateMagazine());
         } catch (InputMismatchException e) {
             consolePrinter.printLine("Wrong data entered, try again.");
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -94,7 +94,7 @@ public class LibraryControl {
 
     private void addBook() {
         try {
-            library.addBook(dataReader.readAndCreateBook());
+            library.addPublication(dataReader.readAndCreateBook());
         } catch (InputMismatchException e) {
             consolePrinter.printLine("Wrong data entered, try again.");
         } catch (ArrayIndexOutOfBoundsException e) {
