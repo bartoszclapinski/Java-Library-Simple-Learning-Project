@@ -7,6 +7,7 @@ import library.io.DataReader;
 import library.io.file.FileManager;
 import library.io.file.FileManagerBuilder;
 import library.model.Library;
+import library.model.Magazine;
 import library.model.Publication;
 
 import java.util.InputMismatchException;
@@ -40,10 +41,14 @@ public class LibraryControl {
                 case ADD_MAGAZINE -> addMagazine();
                 case PRINT_MAGAZINES -> printMagazines();
                 case EXIT -> exit();
+                case DELETE_BOOK -> deleteBook();
+                case DELETE_MAGAZINE -> deleteMagazine();
+
                 default -> consolePrinter.printLine("There is no such option, choose again!");
             }
         } while (option != Option.EXIT);
     }
+
 
     private Option getOption() {
         boolean optionOk = false;
@@ -102,6 +107,26 @@ public class LibraryControl {
         }
     }
 
+    private void deleteMagazine() {
+        try {
+            Magazine magazine = dataReader.readAndCreateMagazine();
+            if (library.removePublication(magazine)) consolePrinter.printLine("Magazine deleted.");
+            else consolePrinter.printLine("No such magazine in library.");
+        } catch (InputMismatchException e) {
+            consolePrinter.printLine("Wrong data entered, try again.");
+        }
+    }
+
+    private void deleteBook() {
+        try {
+            Publication book = dataReader.readAndCreateBook();
+            if (library.removePublication(book)) consolePrinter.printLine("Book deleted.");
+            else consolePrinter.printLine("No such book in library.");
+        } catch (InputMismatchException e) {
+            consolePrinter.printLine("Wrong data entered, try again.");        }
+
+    }
+
     private void printOptions() {
         System.out.println("Choose option: ");
         for (Option option : Option.values()) {
@@ -114,7 +139,9 @@ public class LibraryControl {
         ADD_BOOK(1, "Add new book"),
         PRINT_BOOKS(2, "Print all books"),
         ADD_MAGAZINE(3, "Add new magazine"),
-        PRINT_MAGAZINES(4, "Print all magazines");
+        PRINT_MAGAZINES(4, "Print all magazines"),
+        DELETE_BOOK(5, "Delete book"),
+        DELETE_MAGAZINE(6, "Delete magazine");
 
         private final int value;
         private final String description;
