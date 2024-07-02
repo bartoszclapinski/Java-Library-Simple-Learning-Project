@@ -9,7 +9,9 @@ import library.io.file.FileManagerBuilder;
 import library.model.Library;
 import library.model.Magazine;
 import library.model.Publication;
+import library.model.comparator.AlphabeticalComparator;
 
+import java.util.Arrays;
 import java.util.InputMismatchException;
 
 public class LibraryControl {
@@ -77,7 +79,7 @@ public class LibraryControl {
     }
 
     private void printMagazines() {
-            Publication[] publications = library.getPublications();
+            Publication[] publications = getSortedPublications();
             consolePrinter.printMagazines(publications);
         }
 
@@ -93,9 +95,15 @@ public class LibraryControl {
     }
 
     private void printBooks() {
-            Publication[] publications = library.getPublications();
-            consolePrinter.printBooks(publications);
-        }
+        Publication[] publications = getSortedPublications();
+        consolePrinter.printBooks(publications);
+    }
+
+    private Publication[] getSortedPublications() {
+        Publication[] publications = library.getPublications();
+        Arrays.sort(publications, new AlphabeticalComparator());
+        return publications;
+    }
 
     private void addBook() {
         try {
