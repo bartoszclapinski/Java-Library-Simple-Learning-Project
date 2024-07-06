@@ -7,11 +7,9 @@ import library.io.DataReader;
 import library.io.file.FileManager;
 import library.io.file.FileManagerBuilder;
 import library.model.Library;
+import library.model.LibraryUser;
 import library.model.Magazine;
 import library.model.Publication;
-import library.model.comparator.AlphabeticalComparator;
-
-import java.util.Arrays;
 import java.util.InputMismatchException;
 
 public class LibraryControl {
@@ -42,15 +40,28 @@ public class LibraryControl {
                 case PRINT_BOOKS -> printBooks();
                 case ADD_MAGAZINE -> addMagazine();
                 case PRINT_MAGAZINES -> printMagazines();
-                case EXIT -> exit();
                 case DELETE_BOOK -> deleteBook();
                 case DELETE_MAGAZINE -> deleteMagazine();
-
+                case ADD_USER -> addUser();
+                case PRINT_USERS -> printUsers();
+                case EXIT -> exit();
                 default -> consolePrinter.printLine("There is no such option, choose again!");
             }
         } while (option != Option.EXIT);
     }
 
+    private void printUsers() {
+        consolePrinter.printUsers(library.getUsers().values());
+    }
+
+    private void addUser() {
+        LibraryUser libraryUser = dataReader.createLibraryUser();
+        try {
+            library.addUser(libraryUser);
+        } catch (InputMismatchException e) {
+            consolePrinter.printLine("Wrong data entered, try again.");
+        }
+    }
 
     private Option getOption() {
         boolean optionOk = false;
@@ -79,8 +90,7 @@ public class LibraryControl {
     }
 
     private void printMagazines() {
-            Publication[] publications = getSortedPublications();
-            consolePrinter.printMagazines(publications);
+            consolePrinter.printMagazines(library.getPublications().values());
         }
 
     private void exit() {
@@ -95,14 +105,7 @@ public class LibraryControl {
     }
 
     private void printBooks() {
-        Publication[] publications = getSortedPublications();
-        consolePrinter.printBooks(publications);
-    }
-
-    private Publication[] getSortedPublications() {
-        Publication[] publications = library.getPublications();
-        Arrays.sort(publications, new AlphabeticalComparator());
-        return publications;
+        consolePrinter.printBooks(library.getPublications().values());
     }
 
     private void addBook() {
@@ -149,7 +152,9 @@ public class LibraryControl {
         ADD_MAGAZINE(3, "Add new magazine"),
         PRINT_MAGAZINES(4, "Print all magazines"),
         DELETE_BOOK(5, "Delete book"),
-        DELETE_MAGAZINE(6, "Delete magazine");
+        DELETE_MAGAZINE(6, "Delete magazine"),
+        ADD_USER(7, "Add new user"),
+        PRINT_USERS(8, "Print all users");
 
         private final int value;
         private final String description;

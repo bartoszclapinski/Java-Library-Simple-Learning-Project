@@ -8,11 +8,13 @@ public abstract class Publication implements Serializable, Comparable<Publicatio
     private int year;
     private String title;
     private String publisher;
+    private int copies;
 
     public Publication(int year, String title, String publisher) {
         this.year = year;
         this.title = title;
         this.publisher = publisher;
+        this.copies = 1;
     }
 
     public int getYear() {
@@ -37,6 +39,14 @@ public abstract class Publication implements Serializable, Comparable<Publicatio
 
     public void setPublisher(String publisher) {
         this.publisher = publisher;
+    }
+
+    public int getCopies() {
+        return copies;
+    }
+
+    public void setCopies(int copies) {
+        this.copies = copies;
     }
 
     public abstract String toCsv();
