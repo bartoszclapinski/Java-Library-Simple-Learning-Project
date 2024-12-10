@@ -1,10 +1,9 @@
 package library.model;
 
 import java.io.Serializable;
-import java.util.Comparator;
 import java.util.Objects;
 
-public abstract class Publication implements Serializable, Comparable<Publication> {
+public abstract class Publication implements Serializable, Comparable<Publication>, CsvConvertible {
     private int year;
     private String title;
     private String publisher;
@@ -49,7 +48,7 @@ public abstract class Publication implements Serializable, Comparable<Publicatio
         this.copies = copies;
     }
 
-    public abstract String toCsv();
+    
 
     /*
         @Overriding

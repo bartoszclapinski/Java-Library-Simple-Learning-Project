@@ -3,7 +3,6 @@ package library.model;
 import library.exception.UserAlreadyExistsException;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,12 +27,10 @@ public class Library implements Serializable {
     }
 
     public void addPublication(Publication publication) {
-        if (publications.containsKey(publication.getTitle())) {
-            System.out.println("The library already has this publication");
+        if (publications.containsKey(publication.getTitle())) {            
             increasePublicationCopies(publication);
         }
-        publications.put(publication.getTitle(), publication);
-        System.out.println("The publication has been added to the library");
+        publications.put(publication.getTitle(), publication);        
     }
 
     public void addUser(LibraryUser user) {
