@@ -3,7 +3,11 @@ package library.model;
 import library.exception.UserAlreadyExistsException;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -16,8 +20,20 @@ public class Library implements Serializable {
         return publications;
     }
 
+    public Collection<Publication> getSortedPublications(Comparator<Publication> comparator) {
+       List<Publication> collection = new ArrayList<>(publications.values());
+       collection.sort(comparator);
+       return collection;
+    }
+
     public Map<String, LibraryUser> getUsers() {
         return users;
+    }
+
+    public Collection<LibraryUser> getSortedUsers(Comparator<LibraryUser> comparator) {
+        List<LibraryUser> collection = new ArrayList<>(users.values());
+        collection.sort(comparator);
+        return collection;
     }
 
     private void increasePublicationCopies(Publication publication){
